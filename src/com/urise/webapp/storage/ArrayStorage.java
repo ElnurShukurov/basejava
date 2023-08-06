@@ -63,7 +63,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        return Arrays.copyOf(storage, arraySize);
+        return Arrays.copyOfRange(storage, 0, arraySize);
     }
 
     public int size() {
