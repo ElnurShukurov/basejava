@@ -41,8 +41,7 @@ public class ArrayStorage {
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
-            Resume resume = storage[index];
-            return resume;
+            return storage[index];
         } else {
             System.out.println("There is no " + uuid + " resume in the storage to get");
         }
@@ -53,6 +52,7 @@ public class ArrayStorage {
         int index = getIndex(uuid);
         if (index >= 0) {
             storage[index] = storage[arraySize - 1];
+            storage[arraySize - 1] = null;
             arraySize--;
         } else {
             System.out.println("There is no " + uuid + " resume in the storage to delete");
@@ -70,7 +70,7 @@ public class ArrayStorage {
         return arraySize;
     }
 
-    public int getIndex(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < arraySize; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
