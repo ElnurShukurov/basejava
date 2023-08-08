@@ -7,10 +7,7 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage implements Storage {
-    private static final int STORAGE_LIMIT = 10000;
-    private final Resume[] storage = new Resume[STORAGE_LIMIT];
-    private int arraySize = 0;
+public class ArrayStorage extends AbstractArrayStorage {
 
     public void clear() {
         Arrays.fill(storage, 0, arraySize, null);
@@ -38,16 +35,6 @@ public class ArrayStorage implements Storage {
         }
     }
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
-            System.out.println("There is no " + uuid + " resume in the storage to get");
-        }
-        return null;
-    }
-
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
@@ -66,11 +53,7 @@ public class ArrayStorage implements Storage {
         return Arrays.copyOfRange(storage, 0, arraySize);
     }
 
-    public int size() {
-        return arraySize;
-    }
-
-    private int getIndex(String uuid) {
+    protected int getIndex(String uuid) {
         for (int i = 0; i < arraySize; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
