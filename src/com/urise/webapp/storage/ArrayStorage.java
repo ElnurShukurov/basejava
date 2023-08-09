@@ -7,16 +7,6 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            System.out.println("There is no " + r.getUuid() + " resume in the storage to update");
-        } else {
-            storage[index] = new Resume();
-            storage[index].setUuid("Updated resume " + r.getUuid());
-        }
-    }
-
     public void save(Resume r) {
         if (arraySize == STORAGE_LIMIT) {
             System.out.println("Storage if full");
@@ -26,16 +16,6 @@ public class ArrayStorage extends AbstractArrayStorage {
             storage[arraySize] = r;
             arraySize++;
         }
-    }
-
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
-            System.out.println("There is no " + uuid + " resume in the storage to get");
-        }
-        return null;
     }
 
     public void delete(String uuid) {

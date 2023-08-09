@@ -7,17 +7,6 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            System.out.println("There is no " + r.getUuid() + " resume in the storage to update");
-        } else {
-            storage[index] = new Resume();
-            storage[index].setUuid("Updated resume " + r.getUuid());
-        }
-    }
-
-    @Override
     public void save(Resume r) {
         int insertIndex = getIndex(r.getUuid());
         if (arraySize == STORAGE_LIMIT) {
@@ -25,23 +14,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         } else if (insertIndex >= 0) {
             System.out.println("Storage already contains resume " + r.getUuid());
         } else {
-                insertIndex = -insertIndex - 1;
+            insertIndex = -insertIndex - 1;
             for (int i = arraySize - 1; i >= insertIndex; i--) {
                 storage[i + 1] = storage[i];
             }
             storage[insertIndex] = r;
             arraySize++;
         }
-    }
-
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
-            System.out.println("There is no " + uuid + " resume in the storage to get");
-        }
-        return null;
     }
 
     @Override
