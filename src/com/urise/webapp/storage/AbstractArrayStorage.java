@@ -35,6 +35,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Storage already contains resume " + r.getUuid());
         } else {
             insertElement(r, insertIndex);
+            arraySize++;
         }
     }
 
@@ -53,7 +54,9 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index < 0) {
             System.out.println("There is no " + uuid + " resume in the storage to delete");
         } else {
-            removeElement(index);
+            fillDeletedElement(index);
+            storage[arraySize - 1] = null;
+            arraySize--;
         }
     }
 
@@ -69,5 +72,5 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract void insertElement(Resume r, int insertIndex);
 
-    protected abstract void removeElement(int index);
+    protected abstract void fillDeletedElement(int index);
 }
