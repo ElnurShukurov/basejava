@@ -14,19 +14,20 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void insertElement(Resume r, int insertIndex) {
-        insertIndex = -insertIndex - 1;
-        if (arraySize - insertIndex >= 0) {
-            System.arraycopy(storage, insertIndex, storage, insertIndex + 1, arraySize - insertIndex);
+    protected void insertElement(Resume r, int index) {
+        int insertionIndex = -index - 1;
+        if (arraySize - insertionIndex >= 0) {
+            System.arraycopy(storage, insertionIndex, storage, insertionIndex + 1, arraySize - insertionIndex);
         }
-        storage[insertIndex] = r;
+        storage[insertionIndex] = r;
         arraySize++;
     }
 
     @Override
     protected void removeElement(int index) {
-        if (arraySize - index - 1 >= 0) {
-            System.arraycopy(storage, index + 1, storage, index, arraySize - index - 1);
+        int elementsToShift = arraySize - index - 1;
+        if (elementsToShift >= 0) {
+            System.arraycopy(storage, index + 1, storage, index, elementsToShift);
         }
         storage[arraySize - 1] = null;
         arraySize--;
