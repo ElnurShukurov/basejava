@@ -27,6 +27,17 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
+    public void save(Resume r) {
+        int insertIndex = getIndex(r.getUuid());
+        if (arraySize == STORAGE_LIMIT) {
+            System.out.println("Storage is full");
+        } else if (insertIndex >= 0) {
+            System.out.println("Storage already contains resume " + r.getUuid());
+        } else {
+            insertElement(r, insertIndex);
+        }
+    }
+
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
@@ -35,6 +46,15 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("There is no " + uuid + " resume in the storage to get");
         }
         return null;
+    }
+
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            System.out.println("There is no " + uuid + " resume in the storage to delete");
+        } else {
+            removeElement(index);
+        }
     }
 
     public Resume[] getAll() {
@@ -46,4 +66,8 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     protected abstract int getIndex(String uuid);
+
+    protected abstract void insertElement(Resume r, int insertIndex);
+
+    protected abstract void removeElement(int index);
 }
