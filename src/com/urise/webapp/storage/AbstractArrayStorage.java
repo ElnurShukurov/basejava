@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -20,19 +23,18 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void update(Resume r) {
         int index = getIndex(r.getUuid());
         if (index < 0) {
-            System.out.println("There is no " + r.getUuid() + " resume in the storage to update");
+            throw new NotExistStorageException(r.getUuid());
         } else {
-            storage[index] = new Resume();
-            storage[index].setUuid("Updated resume " + r.getUuid());
+            storage[index] = new Resume("Updated resume " + r.getUuid());
         }
     }
 
     public final void save(Resume r) {
         int insertIndex = getIndex(r.getUuid());
         if (arraySize == STORAGE_LIMIT) {
-            System.out.println("Storage is full");
+            throw new StorageException("Storage is full", r.getUuid());
         } else if (insertIndex >= 0) {
-            System.out.println("Storage already contains resume " + r.getUuid());
+            throw new ExistStorageException(r.getUuid());
         } else {
             insertElement(r, insertIndex);
             arraySize++;
@@ -41,18 +43,18 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public final Resume get(String uuid) {
         int index = getIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+
         } else {
-            System.out.println("There is no " + uuid + " resume in the storage to get");
+            return storage[index];
         }
-        return null;
     }
 
     public final void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("There is no " + uuid + " resume in the storage to delete");
+            throw new NotExistStorageException(uuid);
         } else {
             fillDeletedElement(index);
             storage[arraySize - 1] = null;
