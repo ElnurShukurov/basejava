@@ -42,7 +42,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void updateExistingResume() throws Exception {
-        Resume resumeToUpdate = RESUME_1;
+        Resume resumeToUpdate = new Resume(UUID_1);
         storage.update(resumeToUpdate);
 
         Resume updatedResume = storage.get(UUID_1);
@@ -77,7 +77,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNonExistingResume() throws Exception {
-        storage.get("dummy");
+        storage.get(UUID_4);
     }
 
     @Test(expected = NotExistStorageException.class)
