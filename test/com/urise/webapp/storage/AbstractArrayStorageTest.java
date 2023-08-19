@@ -21,7 +21,7 @@ public abstract class AbstractArrayStorageTest {
     private static final Resume RESUME_3 = new Resume(UUID_3);
     private static final Resume RESUME_4 = new Resume(UUID_4);
 
-    public AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -68,6 +68,19 @@ public abstract class AbstractArrayStorageTest {
         storage.save(RESUME_1);
     }
 
+    @Test(expected = StorageException.class)
+    public void saveOverflow() throws Exception {
+        storage.clear();
+        try {
+            for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                storage.save(new Resume());
+            }
+        } catch (StorageException e) {
+            fail("Exception was thrown ahead of time");
+        }
+        storage.save(new Resume());
+    }
+
     @Test
     public void getExistingResume() throws Exception {
         assertGet(RESUME_1);
@@ -103,19 +116,6 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void size() throws Exception {
         assertSize(3);
-    }
-
-    @Test(expected = StorageException.class)
-    public void overflow() throws Exception {
-        storage.clear();
-        try {
-            for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            fail("Exception was thrown ahead of time");
-        }
-        storage.save(new Resume());
     }
 
     private void assertSize(int size) {
