@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage extends AbstractStorage {
-    protected static final int STORAGE_LIMIT = 100000;
+    protected static final int STORAGE_LIMIT = 100;
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int arraySize = 0;
 
@@ -51,6 +51,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     public int doSize() {
         return arraySize;
+    }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        int index = getIndex(searchKey.toString());
+        return index >= 0;
     }
 
     protected abstract void insertElement(Resume r, int insertIndex);
