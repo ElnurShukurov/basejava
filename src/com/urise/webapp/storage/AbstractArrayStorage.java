@@ -19,12 +19,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public final void doUpdate(Resume r) {
-        int index = getIndex(r.getUuid());
+        int index = (int) searchKey(r.getUuid());
         storage[index] = r;
     }
 
     public final void doSave(Resume r) {
-        int insertIndex = getIndex(r.getUuid());
+        int insertIndex = (int) searchKey(r.getUuid());
         if (arraySize == STORAGE_LIMIT) {
             throw new StorageException("Storage is full", r.getUuid());
         } else {
@@ -34,12 +34,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public final Resume doGet(String uuid) {
-        int index = getIndex(uuid);
+        int index = (int) searchKey(uuid);
         return storage[index];
     }
 
     public final void doDelete(String uuid) {
-        int index = getIndex(uuid);
+        int index = (int) searchKey(uuid);
         fillDeletedElement(index);
         storage[arraySize - 1] = null;
         arraySize--;
@@ -55,7 +55,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object searchKey) {
-        int index = getIndex(searchKey.toString());
+        int index = (int) searchKey(searchKey.toString());
         return index >= 0;
     }
 

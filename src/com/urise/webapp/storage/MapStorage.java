@@ -35,7 +35,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Resume[] doGetAll() {
-        return storage.values().toArray(new Resume[storage.size()]);
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        return 0;
+    protected Object searchKey(String uuid) {
+        return uuid;
     }
 }
