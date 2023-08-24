@@ -11,34 +11,23 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public void update(Resume r) {
-        if (!isExist(r)) {
-            getNotExistingSearchKey(r.getUuid());
-        } else {
-            doUpdate(r);
-        }
+        getNotExistingSearchKey(r.getUuid());
+        doUpdate(r);
     }
 
     public void save(Resume r) {
-        if (isExist(r)) {
-            getExistingSearchKey(r.getUuid());
-        } else {
-            doSave(r);
-        }
+        getExistingSearchKey(r.getUuid());
+        doSave(r);
     }
 
     public Resume get(String uuid) {
-        if (!isExist(new Resume(uuid))) {
-            getNotExistingSearchKey(uuid);
-        }
+        getNotExistingSearchKey(uuid);
         return doGet(uuid);
     }
 
     public void delete(String uuid) {
-        if (!isExist(new Resume(uuid))) {
-            getNotExistingSearchKey(uuid);
-        } else {
-            doDelete(uuid);
-        }
+        getNotExistingSearchKey(uuid);
+        doDelete(uuid);
     }
 
     public Resume[] getAll() {
