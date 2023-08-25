@@ -13,48 +13,57 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int arraySize = 0;
 
+    protected abstract Integer getSearchKey(String uuid);
+
+    protected abstract void insertElement(Resume r, int insertIndex);
+
+    protected abstract void fillDeletedElement(int index);
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return (Integer) searchKey >= 0;
+    }
+
+    @Override
     public void doClear() {
         Arrays.fill(storage, 0, arraySize, null);
         arraySize = 0;
     }
 
-    public final void doUpdate(Resume r, Object searchKey) {
-        storage[(Integer) searchKey] = r;
+    @Override
+    public void doUpdate(Resume r, Object index) {
+        storage[(Integer) index] = r;
     }
 
-    public final void doSave(Resume r, Object searchKey) {
+    @Override
+    public void doSave(Resume r, Object index) {
         if (arraySize == STORAGE_LIMIT) {
             throw new StorageException("Storage is full", r.getUuid());
         } else {
-            insertElement(r, (int) searchKey);
+            insertElement(r, (int) index);
             arraySize++;
         }
     }
 
-    public final Resume doGet(String uuid, Object searchKey) {
-        return storage[(int) searchKey];
+    @Override
+    public Resume doGet(Object index) {
+        return storage[(int) index];
     }
 
-    public final void doDelete(String uuid, Object searchKey) {
-        fillDeletedElement((int) searchKey);
+    @Override
+    public void doDelete(Object index) {
+        fillDeletedElement((int) index);
         storage[arraySize - 1] = null;
         arraySize--;
     }
 
+    @Override
     public Resume[] doGetAll() {
         return Arrays.copyOfRange(storage, 0, arraySize);
     }
 
+    @Override
     public int doSize() {
         return arraySize;
     }
-
-    @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
-    }
-
-    protected abstract void insertElement(Resume r, int insertIndex);
-
-    protected abstract void fillDeletedElement(int index);
 }

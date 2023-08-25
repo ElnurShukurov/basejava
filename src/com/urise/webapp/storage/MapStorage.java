@@ -9,6 +9,16 @@ public class MapStorage extends AbstractStorage {
     protected final Map<String, Resume> storage = new TreeMap<>();
 
     @Override
+    protected boolean isExist(Object searchKey) {
+        return storage.containsKey(searchKey.toString());
+    }
+
+    @Override
+    protected Object getSearchKey(String uuid) {
+        return uuid;
+    }
+
+    @Override
     protected void doClear() {
         storage.clear();
     }
@@ -24,12 +34,12 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(String uuid, Object searchKey) {
+    protected Resume doGet(Object searchKey) {
         return storage.get(searchKey);
     }
 
     @Override
-    protected void doDelete(String uuid, Object searchKey) {
+    protected void doDelete(Object searchKey) {
         storage.remove(searchKey);
     }
 
@@ -43,13 +53,4 @@ public class MapStorage extends AbstractStorage {
         return storage.size();
     }
 
-    @Override
-    protected boolean isExist(Object searchKey) {
-        return storage.containsKey(searchKey.toString());
-    }
-
-    @Override
-    protected Object getSearchKey(String uuid) {
-        return uuid;
-    }
 }
