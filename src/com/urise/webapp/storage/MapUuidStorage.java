@@ -1,0 +1,56 @@
+package com.urise.webapp.storage;
+
+import com.urise.webapp.model.Resume;
+
+import java.util.*;
+
+public class MapUuidStorage extends AbstractStorage {
+    protected final Map<String, Resume> map = new TreeMap<>();
+
+    @Override
+    protected boolean isExist(Object uuid) {
+        return map.containsKey(uuid.toString());
+    }
+
+    @Override
+    protected String getSearchKey(String uuid) {
+        return uuid;
+    }
+
+    @Override
+    protected void doClear() {
+        map.clear();
+    }
+
+    @Override
+    protected void doUpdate(Resume r, Object uuid) {
+        map.put(uuid.toString(), r);
+    }
+
+    @Override
+    protected void doSave(Resume r, Object uuid) {
+        map.put(uuid.toString(), r);
+    }
+
+    @Override
+    protected Resume doGet(Object uuid) {
+        return map.get(uuid);
+    }
+
+    @Override
+    protected void doDelete(Object uuid) {
+        map.remove(uuid);
+    }
+
+    @Override
+    protected List<Resume> doGetAllSorted() {
+        List<Resume> sortedList = new ArrayList<>(map.values());
+        return getSortedResumes(sortedList);
+    }
+
+    @Override
+    protected int doSize() {
+        return map.size();
+    }
+
+}
