@@ -9,7 +9,7 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object uuid) {
-        return map.containsKey(uuid.toString());
+        return map.containsKey((String) uuid);
     }
 
     @Override
@@ -24,12 +24,12 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume r, Object uuid) {
-        map.put(uuid.toString(), r);
+        map.put((String) uuid, r);
     }
 
     @Override
     protected void doSave(Resume r, Object uuid) {
-        map.put(uuid.toString(), r);
+        map.put((String) uuid, r);
     }
 
     @Override
