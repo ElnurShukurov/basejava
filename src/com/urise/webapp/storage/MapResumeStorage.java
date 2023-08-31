@@ -9,7 +9,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object resume) {
-        return resume != null && map.containsValue(resume);
+        return resume != null;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume r, Object resume) {
-        map.put(resume.toString(), r);
+        map.put(r.getUuid(), r);
     }
 
     @Override
@@ -34,22 +34,21 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object resume) {
-        return map.get(resume.toString());
+        return map.get(((Resume) resume).getUuid());
     }
 
     @Override
     protected void doDelete(Object resume) {
-        map.remove(resume.toString());
-    }
-
-    @Override
-    protected List<Resume> doGetAllSorted() {
-        List<Resume> sortedList = new ArrayList<>(map.values());
-        return getSortedResumes(sortedList);
+        map.remove(((Resume) resume).getUuid());
     }
 
     @Override
     protected int doSize() {
         return map.size();
+    }
+
+    @Override
+    protected List<Resume> doGetAll() {
+        return new ArrayList<>(map.values());
     }
 }

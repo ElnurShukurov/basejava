@@ -4,8 +4,6 @@ import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ListStorage extends AbstractStorage {
     protected final List<Resume> list = new ArrayList<>();
@@ -51,15 +49,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> doGetAllSorted() {
-        return getSortedResumes(list.stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList()));
-    }
-
-    @Override
     public int doSize() {
         return list.size();
     }
 
+    @Override
+    protected List<Resume> doGetAll() {
+        return list;
+    }
 }

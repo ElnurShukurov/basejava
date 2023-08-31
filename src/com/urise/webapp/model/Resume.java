@@ -21,6 +21,11 @@ public class Resume {
         this.fullName = fullName;
     }
 
+    public Resume(String fullName) {
+        this.fullName = fullName;
+        this.uuid = UUID.randomUUID().toString();
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -49,5 +54,4 @@ public class Resume {
     public int hashCode() {
         return uuid.hashCode();
     }
-
 }
