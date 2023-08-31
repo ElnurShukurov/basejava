@@ -10,10 +10,10 @@ public class MainCollections {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    private static final String NAME_1 = "Ivan";
-    private static final String NAME_2 = "Oleg";
-    private static final String NAME_3 = "Igor";
-    private static final String NAME_4 = "Elena";
+    private static final String NAME_1 = "Name1";
+    private static final String NAME_2 = "Name2";
+    private static final String NAME_3 = "Name3";
+    private static final String NAME_4 = "Name4";
 
     private static final Resume RESUME_1 = new Resume(UUID_1, NAME_1);
     private static final Resume RESUME_2 = new Resume(UUID_2, NAME_2);

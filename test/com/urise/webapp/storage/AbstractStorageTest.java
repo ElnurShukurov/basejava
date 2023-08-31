@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
     protected final Storage storage;
@@ -20,10 +19,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    private static final String NAME_1 = "Ivan";
-    private static final String NAME_2 = "Oleg";
-    private static final String NAME_3 = "Igor";
-    private static final String NAME_4 = "Elena";
+    private static final String NAME_1 = "Name1";
+    private static final String NAME_2 = "Name2";
+    private static final String NAME_3 = "Name3";
+    private static final String NAME_4 = "Name4";
 
     private static final Resume RESUME_1;
     private static final Resume RESUME_2;
@@ -59,11 +58,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateExistingResume() throws Exception {
-        Resume resumeToUpdate = RESUME_1;
+        Resume resumeToUpdate = new Resume(UUID_1, "New Name");
         storage.update(resumeToUpdate);
-
-        Resume updatedResume = storage.get(UUID_1);
-        assertEquals(resumeToUpdate, updatedResume);
+        assertSame(resumeToUpdate, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -113,7 +110,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAllSorted() throws Exception {
         List<Resume> actualStorage = storage.getAllSorted();
-        List<Resume> expectedStorage = new ArrayList<>(Arrays.asList(RESUME_3, RESUME_1, RESUME_2));
+        List<Resume> expectedStorage = new ArrayList<>(Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
         assertArrayEquals(actualStorage.toArray(), expectedStorage.toArray());
     }
 

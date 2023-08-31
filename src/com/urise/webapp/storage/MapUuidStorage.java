@@ -34,12 +34,12 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object uuid) {
-        return map.get(uuid);
+        return map.get((String) uuid);
     }
 
     @Override
     protected void doDelete(Object uuid) {
-        map.remove(uuid);
+        map.remove((String) uuid);
     }
 
     @Override
