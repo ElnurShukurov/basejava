@@ -6,7 +6,8 @@ public enum ContactType {
     EMAIL("Почта: "),
     LINKEDIN("Профиль LinkedIn"),
     GITHUB("Профиль GitHub"),
-    STACKOVERFLOW("Профиль StackOverFlow");
+    STACKOVERFLOW("Профиль StackOverFlow"),
+    HOME_PAGE("Домашаняя страница");
 
     private String value;
 
