@@ -1,34 +1,26 @@
 package com.urise.webapp.model;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Company {
     private final Link homepage;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final String title;
-    private final String description;
+    private final List<Period> periods = new ArrayList<>();
 
-    public Company(String name, String url, LocalDate startDate, LocalDate endDate, String title, String description) {
-        Objects.requireNonNull(startDate, "startDate must not be null");
-        Objects.requireNonNull(endDate, "endDate must not be null");
-        Objects.requireNonNull(title, "title must not be null");
+    public Company(String name, String url, List<Period> periods) {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(url, "url must not be null");
+        Objects.requireNonNull(periods, "periods must not be null");
         this.homepage = new Link(name, url);
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.title = title;
-        this.description = description;
+        this.periods.addAll(periods);
     }
 
     @Override
     public String toString() {
         return "Company{" +
                 "homepage=" + homepage +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", periods=" + periods +
                 '}';
     }
 
@@ -37,11 +29,11 @@ public class Company {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Company company = (Company) o;
-        return Objects.equals(homepage, company.homepage) && startDate.equals(company.startDate) && endDate.equals(company.endDate) && title.equals(company.title) && Objects.equals(description, company.description);
+        return homepage.equals(company.homepage) && periods.equals(company.periods);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(homepage, startDate, endDate, title, description);
+        return Objects.hash(homepage, periods);
     }
 }

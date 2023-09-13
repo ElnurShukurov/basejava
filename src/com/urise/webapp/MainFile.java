@@ -16,18 +16,26 @@ public class MainFile {
         }
 
         File dir = new File(".\\src\\com\\urise\\webapp");
-        System.out.println(dir.isDirectory());
-        String[] list = dir.list();
-        if (list != null) {
-            for (String name : list) {
-                System.out.println(name);
-            }
-        }
+        traverseDirectory(dir);
 
         try (FileInputStream fis = new FileInputStream(filePath)) {
             System.out.println(fis.read());
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void traverseDirectory(File directory) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    System.out.println(file.getName());
+                    traverseDirectory(file);
+                } else {
+                    System.out.println(file.getName());
+                }
+            }
         }
     }
 }
