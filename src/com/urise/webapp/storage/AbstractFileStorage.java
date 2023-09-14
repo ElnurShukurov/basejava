@@ -36,10 +36,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doClear() {
         File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                doDelete(file);
-            }
+        if (files == null) {
+            throw new StorageException("Error reading files in directory", directory.getAbsolutePath());
+        }
+        for (File file : files) {
+            doDelete(file);
         }
     }
 
