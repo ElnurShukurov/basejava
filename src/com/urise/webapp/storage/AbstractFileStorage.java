@@ -49,7 +49,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             doWrite(r, file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("File write error", r.getUuid(), e);
         }
     }
 
@@ -57,10 +57,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
-            doWrite(r, file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
+        doUpdate(r, file);
     }
 
     @Override
@@ -68,7 +68,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             return doRead(file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("File read error", file.getName(), e);
         }
     }
 
@@ -83,7 +83,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected int doSize() {
         String[] fileList = directory.list();
         if (fileList == null) {
-            throw new StorageException("Error listing files in directory", directory.getAbsolutePath());
+            throw new StorageException("Directory read error", null);
         }
         return fileList.length;
     }
@@ -92,7 +92,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected List<Resume> doGetAll() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("Error listing files in directory", directory.getAbsolutePath());
+            throw new StorageException("Directory read error", null);
         }
         List<Resume> resumes = new ArrayList<>(files.length);
         for (File file : files) {

@@ -34,30 +34,20 @@ public class ResumeTestData {
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualifications));
 
         List<Company> experiences = new ArrayList<>();
-        Period experiencePeriod1 = new Period("Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок.", LocalDate.of(2013, 10, 1), LocalDate.now());
-        List<Period> allExperiences = new ArrayList<>();
-        allExperiences.add(experiencePeriod1);
-        Company javaOnlineProjects = new Company("Java Online Projects", "https://javaops.ru/", allExperiences);
+        Company javaOnlineProjects = new Company("Java Online Projects", "https://javaops.ru/", new Company.Period(LocalDate.of(2013, 10, 1), LocalDate.now(), "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
         experiences.add(javaOnlineProjects);
-        resume.addSection(SectionType.EXPERIENCE, new CompanySection(SectionType.EXPERIENCE, experiences));
+        resume.addSection(SectionType.EXPERIENCE, new CompanySection(experiences));
 
         List<Company> educations = new ArrayList<>();
 
-        Period courseraPeriod = new Period("'Functional Programming Principles in Scala' by Martin Odersky", null, LocalDate.of(2013, 3, 1), LocalDate.of(2013, 5, 1));
-        List<Period> allCourseraPeriods = new ArrayList<>();
-        allCourseraPeriods.add(courseraPeriod);
-        Company coursera = new Company("Coursera", "https://www.coursera.org/course/progfun", allCourseraPeriods);
+        Company coursera = new Company("Coursera", "https://www.coursera.org/course/progfun", new Company.Period(LocalDate.of(2013, 3, 1), LocalDate.of(2013, 5, 1), "'Functional Programming Principles in Scala' by Martin Odersky", null));
+
         educations.add(coursera);
 
-        Period universityPeriod1 = new Period("Инженер (программист Fortran, C)\n", null, LocalDate.of(1987, 9, 1), LocalDate.of(1993, 7, 1));
-        Period universityPeriod2 = new Period("Аспирантура (программист С, С++)", null, LocalDate.of(1993, 9, 1), LocalDate.of(1996, 7, 1));
-        List<Period> allUniversityPeriods = new ArrayList<>();
-        allUniversityPeriods.add(universityPeriod1);
-        allUniversityPeriods.add(universityPeriod2);
-        Company university = new Company("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/", allUniversityPeriods);
+        Company university = new Company("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/", new Company.Period(LocalDate.of(1987, 9, 1), LocalDate.of(1993, 7, 1), "Инженер (программист Fortran, C)", null), new Company.Period(LocalDate.of(1993, 9, 1), LocalDate.of(1996, 7, 1), "Аспирантура (программист С, С++)", null));
         educations.add(university);
 
-        resume.addSection(SectionType.EDUCATION, new CompanySection(SectionType.EDUCATION, educations));
+        resume.addSection(SectionType.EDUCATION, new CompanySection(educations));
 
         System.out.println(resume.getFullName());
         for (ContactType type : ContactType.values()) {

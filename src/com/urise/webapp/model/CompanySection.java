@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,7 +8,11 @@ public class CompanySection extends Section {
 
     private final List<Company> companies;
 
-    public CompanySection(SectionType type, List<Company> companies) {
+    public CompanySection (Company... companies) {
+        this(Arrays.asList(companies));
+    }
+
+    public CompanySection(List<Company> companies) {
         Objects.requireNonNull(companies, "companies must not be null");
         this.companies = companies;
     }

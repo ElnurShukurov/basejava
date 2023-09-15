@@ -30,10 +30,10 @@ public class MainFile {
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    System.out.println(file.getName());
+                    System.out.println("Directory: " + file.getName());
                     traverseDirectory(file);
-                } else {
-                    System.out.println(file.getName());
+                } else if (file.isFile()) {
+                    System.out.println("File: " + file.getName());
                 }
             }
         }
