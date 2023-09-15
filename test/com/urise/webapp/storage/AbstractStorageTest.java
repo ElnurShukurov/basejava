@@ -7,6 +7,7 @@ import com.urise.webapp.model.ResumeTestData;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("C:\\basejava\\storage");
     protected final Storage storage;
     static ResumeTestData resumeTestData = new ResumeTestData();
 
@@ -63,7 +65,7 @@ public abstract class AbstractStorageTest {
     public void updateExistingResume() throws Exception {
         Resume resumeToUpdate = new Resume(UUID_1, "New Name");
         storage.update(resumeToUpdate);
-        assertSame(resumeToUpdate, storage.get(UUID_1));
+        assertTrue(resumeToUpdate.equals(storage.get(UUID_1)));
     }
 
     @Test(expected = NotExistStorageException.class)
