@@ -16,7 +16,7 @@ public class MainFile {
         }
 
         File dir = new File(".\\src\\com\\urise\\webapp");
-        traverseDirectory(dir);
+        traverseDirectory(dir, 0);
 
         try (FileInputStream fis = new FileInputStream(filePath)) {
             System.out.println(fis.read());
@@ -25,17 +25,26 @@ public class MainFile {
         }
     }
 
-    public static void traverseDirectory(File directory) {
+    public static void traverseDirectory(File directory, int level) {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    System.out.println("Directory: " + file.getName());
-                    traverseDirectory(file);
+                    System.out.println(getIndent(level) + "Directory: " + file.getName());
+                    traverseDirectory(file, level + 1);
                 } else if (file.isFile()) {
-                    System.out.println("File: " + file.getName());
+                    System.out.println(getIndent(level) + "File: " + file.getName());
                 }
             }
         }
     }
+
+    private static String getIndent(int level) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < level; i++) {
+            sb.append("    ");
+        }
+        return sb.toString();
+    }
 }
+
