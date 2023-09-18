@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     ObjectStreamSerializationStrategy strategy;
@@ -37,11 +38,8 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected void doClear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
-        }
+        getFileList().forEach(this::doDelete);
+
     }
 
     @Override
@@ -83,21 +81,21 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected int doSize() {
-        try {
-            return (int) Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
-        }
+        return (int) getFileList().count();
     }
 
     @Override
     protected List<Resume> doGetAll() {
         List<Resume> resumes = new ArrayList<>();
+        getFileList().forEach(path -> resumes.add(doGet(path)));
+        return resumes;
+    }
+
+    Stream<Path> getFileList() {
         try {
-            Files.list(directory).forEach(path -> resumes.add(doGet(path)));
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
         }
-        return resumes;
     }
 }
