@@ -2,9 +2,11 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.serialization.ObjectStreamSerializationStrategy;
+import com.urise.webapp.storage.serialization.SerializationStrategy;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,11 +15,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class ObjectStreamPathStorage extends AbstractStorage<Path> {
-    ObjectStreamSerializationStrategy strategy;
+public class PathStorage extends AbstractStorage<Path> {
+    private SerializationStrategy strategy;
     private final Path directory;
 
-    protected ObjectStreamPathStorage(String dir, ObjectStreamSerializationStrategy strategy) {
+    protected PathStorage(String dir, SerializationStrategy strategy) {
         directory = Paths.get(dir);
         this.strategy = strategy;
         Objects.requireNonNull(directory, "directory must not be null");
@@ -91,7 +93,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
         return resumes;
     }
 
-    Stream<Path> getFileList() {
+    private Stream<Path> getFileList() {
         try {
             return Files.list(directory);
         } catch (IOException e) {

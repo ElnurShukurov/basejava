@@ -2,18 +2,18 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.serialization.ObjectStreamSerializationStrategy;
+import com.urise.webapp.storage.serialization.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ObjectStreamFileStorage extends AbstractStorage<File> {
-    ObjectStreamSerializationStrategy strategy;
+public class FileStorage extends AbstractStorage<File> {
+    private SerializationStrategy strategy;
     private final File directory;
 
-    protected ObjectStreamFileStorage(File directory, ObjectStreamSerializationStrategy strategy) {
+    protected FileStorage(File directory, SerializationStrategy strategy) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
@@ -37,10 +37,7 @@ public class ObjectStreamFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doClear() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Error reading files in directory", directory.getAbsolutePath());
-        }
+        File[] files = getFilesList();
         for (File file : files) {
             doDelete(file);
         }
@@ -83,23 +80,25 @@ public class ObjectStreamFileStorage extends AbstractStorage<File> {
 
     @Override
     protected int doSize() {
-        String[] fileList = directory.list();
-        if (fileList == null) {
-            throw new StorageException("Directory read error", null);
-        }
+        File[] fileList = getFilesList();
         return fileList.length;
     }
 
     @Override
     protected List<Resume> doGetAll() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Directory read error", null);
-        }
+        File[] files = getFilesList();
         List<Resume> resumes = new ArrayList<>(files.length);
         for (File file : files) {
             resumes.add(doGet(file));
         }
         return resumes;
+    }
+
+    private File[] getFilesList() {
+        File[] fileList = directory.listFiles();
+        if (fileList == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        return fileList;
     }
 }
