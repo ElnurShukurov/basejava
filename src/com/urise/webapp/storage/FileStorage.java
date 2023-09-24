@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
-    private SerializationStrategy strategy;
-    private final File directory;
+    private SerializationStrategy serializationStrategy;
+    private File directory;
 
-    protected FileStorage(File directory, SerializationStrategy strategy) {
+    protected FileStorage(File directory, SerializationStrategy serializationStrategy) {
         Objects.requireNonNull(directory, "directory must not be null");
+
+        this.serializationStrategy = serializationStrategy;
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -22,7 +24,6 @@ public class FileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
-        this.strategy = strategy;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume r, File file) {
         try {
-            strategy.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
+            serializationStrategy.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File write error", r.getUuid(), e);
         }
@@ -65,7 +66,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return strategy.doRead(new BufferedInputStream(new FileInputStream(file)));
+            return serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName(), e);
         }
@@ -97,7 +98,7 @@ public class FileStorage extends AbstractStorage<File> {
     private File[] getFilesList() {
         File[] fileList = directory.listFiles();
         if (fileList == null) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error");
         }
         return fileList;
     }
