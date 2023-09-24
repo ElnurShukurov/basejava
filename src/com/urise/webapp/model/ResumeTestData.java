@@ -56,14 +56,6 @@ public class ResumeTestData {
             }
         }
 
-        System.out.println("\n" + resume.getSection(SectionType.OBJECTIVE).toString() + "\n");
-        System.out.println(resume.getSection(SectionType.PERSONAL).toString() + "\n");
-        System.out.println(resume.getSection(SectionType.ACHIEVEMENT).toString() + "\n");
-        System.out.println(resume.getSection(SectionType.QUALIFICATIONS).toString() + "\n");
-
-        System.out.println(resume.getSection(SectionType.EXPERIENCE).toString());
-        System.out.println(resume.getSection(SectionType.EDUCATION).toString());
-
         return resume;
     }
 }

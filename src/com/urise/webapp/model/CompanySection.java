@@ -1,12 +1,17 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class CompanySection extends Section {
     private static final long serialVersionUID = 1L;
-    private final List<Company> companies;
+    @XmlElement
+    private List<Company> companies;
+
+    public CompanySection() {
+    }
 
     public CompanySection (Company... companies) {
         this(Arrays.asList(companies));
@@ -36,6 +41,6 @@ public class CompanySection extends Section {
 
     @Override
     public int hashCode() {
-        return Objects.hash(companies);
+        return companies.hashCode();
     }
 }

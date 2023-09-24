@@ -1,5 +1,11 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -13,8 +19,13 @@ import static com.urise.webapp.util.DateUtil.of;
 
 public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final Link homepage;
+    @XmlElement
+    private Link homepage;
+    @XmlElement
     private List<Period> periods = new ArrayList<>();
+
+    public Company() {
+    }
 
     public Company(String name, String url, Period... periods) {
         this(new Link(name, url), Arrays.asList(periods));
@@ -34,8 +45,9 @@ public class Company implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Company company = (Company) o;
-        return homepage.equals(company.homepage) && periods.equals(company.periods);
+        Company that = (Company) o;
+        return Objects.equals(homepage, that.homepage) &&
+                Objects.equals(periods, that.periods);
     }
 
     @Override
@@ -43,11 +55,17 @@ public class Company implements Serializable {
         return Objects.hash(homepage, periods);
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
-        private final String title;
-        private final String description;
-        private final LocalDate startDate;
-        private final LocalDate endDate;
+        private String title;
+        private String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate endDate;
+
+        public Period() {
+        }
 
         public Period(int startYear, Month startMonth, String title, String description) {
             this(of(startYear, startMonth), NOW, title, description);
@@ -76,8 +94,11 @@ public class Company implements Serializable {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            Period period = (Period) o;
-            return title.equals(period.title) && Objects.equals(description, period.description) && startDate.equals(period.startDate) && endDate.equals(period.endDate);
+            Period position = (Period) o;
+            return Objects.equals(startDate, position.startDate) &&
+                    Objects.equals(endDate, position.endDate) &&
+                    Objects.equals(title, position.title) &&
+                    Objects.equals(description, position.description);
         }
 
         @Override

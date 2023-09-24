@@ -1,10 +1,15 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 public class TextSection extends Section {
-    private static final long serialVersionUID = 1L;
-    private final String content;
+    private static long serialVersionUID = 1L;
+    @XmlElement
+    private String content;
+
+    public TextSection() {
+    }
 
     public TextSection(String content) {
         Objects.requireNonNull(content, "content must not be null");
@@ -30,6 +35,6 @@ public class TextSection extends Section {
 
     @Override
     public int hashCode() {
-        return Objects.hash(content);
+        return content.hashCode();
     }
 }
