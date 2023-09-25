@@ -2,7 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.serialization.SerializationStrategy;
+import com.urise.webapp.storage.serialization.StreamSerializationStrategy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
-    private SerializationStrategy serializationStrategy;
+    private StreamSerializationStrategy serializationStrategy;
     private Path directory;
 
-    protected PathStorage(String dir, SerializationStrategy serializationStrategy) {
+    protected PathStorage(String dir, StreamSerializationStrategy serializationStrategy) {
         Objects.requireNonNull(dir, "directory must not be null");
 
         this.serializationStrategy = serializationStrategy;
