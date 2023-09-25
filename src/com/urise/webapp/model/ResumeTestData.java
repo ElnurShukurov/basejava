@@ -49,13 +49,6 @@ public class ResumeTestData {
 
         resume.addSection(SectionType.EDUCATION, new CompanySection(educations));
 
-        System.out.println(resume.getFullName());
-        for (ContactType type : ContactType.values()) {
-            if (resume.getContact(type) != null) {
-                System.out.println(type.getValue() + resume.getContact(type));
-            }
-        }
-
         return resume;
     }
 }
