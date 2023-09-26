@@ -36,6 +36,14 @@ public class Company implements Serializable {
         this.periods = periods;
     }
 
+    public Link getHomepage() {
+        return homepage;
+    }
+
+    public List<Period> getPeriods() {
+        return periods;
+    }
+
     @Override
     public String toString() {
         return "Company(" + homepage + "," + periods + ')';
@@ -83,6 +91,22 @@ public class Company implements Serializable {
             this.description = description;
             this.startDate = startDate;
             this.endDate = endDate;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getEndDate() {
+            return endDate;
         }
 
         @Override
