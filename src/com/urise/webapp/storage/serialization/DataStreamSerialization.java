@@ -4,9 +4,7 @@ import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class DataStreamSerialization implements StreamSerializationStrategy {
     @Override
@@ -63,55 +61,45 @@ public class DataStreamSerialization implements StreamSerializationStrategy {
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
 
-            int contactsSize = dis.readInt();
-            for (int i = 0; i < contactsSize; i++) {
+            Collection<Map.Entry<ContactType, String>> contacts = readCollection(dis, () -> {
                 ContactType contactType = ContactType.valueOf(dis.readUTF());
                 String contactValue = dis.readUTF();
-                resume.addContact(contactType, contactValue);
-            }
+                return new AbstractMap.SimpleEntry<>(contactType, contactValue);
+            });
+            contacts.forEach(entry -> resume.addContact(entry.getKey(), entry.getValue()));
 
-            int sectionsSize = dis.readInt();
-            for (int i = 0; i < sectionsSize; i++) {
+            Collection<Map.Entry<SectionType, Section>> sections = readCollection(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE:
                         String text = dis.readUTF();
-                        resume.addSection(sectionType, new TextSection(text));
-                        break;
+                        return new AbstractMap.SimpleEntry<>(sectionType, new TextSection(text));
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        int itemsSize = dis.readInt();
-                        List<String> items = new ArrayList<>();
-                        for (int j = 0; j < itemsSize; j++) {
-                            items.add(dis.readUTF());
-                        }
-                        resume.addSection(sectionType, new ListSection(items));
-                        break;
+                        List<String> items = new ArrayList<>(readCollection(dis, dis::readUTF));
+                        return new AbstractMap.SimpleEntry<>(sectionType, new ListSection(items));
                     case EXPERIENCE:
                     case EDUCATION:
-                        int companiesSize = dis.readInt();
-                        List<Company> companies = new ArrayList<>();
-                        for (int j = 0; j < companiesSize; j++) {
+                        List<Company> companies = (List<Company>) readCollection(dis, () -> {
                             String companyName = dis.readUTF();
                             String companyUrl = dis.readUTF();
-                            int periodsSize = dis.readInt();
-                            List<Company.Period> periods = new ArrayList<>();
-                            for (int k = 0; k < periodsSize; k++) {
+                            List<Company.Period> periods = (List<Company.Period>) readCollection(dis, () -> {
                                 String periodTitle = dis.readUTF();
                                 boolean hasValue = dis.readBoolean();
                                 String periodDescription = hasValue ? dis.readUTF() : null;
                                 LocalDate startDate = LocalDate.parse(dis.readUTF());
                                 LocalDate endDate = LocalDate.parse(dis.readUTF());
-                                periods.add(new Company.Period(startDate, endDate, periodTitle, periodDescription));
-                            }
-                            companies.add(new Company(new Link(companyName, companyUrl), periods));
-                        }
-                        resume.addSection(sectionType, new CompanySection(companies));
-                        break;
+                                return new Company.Period(startDate, endDate, periodTitle, periodDescription);
+                            });
+                            return new Company(new Link(companyName, companyUrl), periods);
+                        });
+                        return new AbstractMap.SimpleEntry<>(sectionType, new CompanySection(companies));
+                    default:
+                        throw new IllegalStateException("Unsupported section type: " + sectionType);
                 }
-            }
-
+            });
+            sections.forEach(entry -> resume.addSection(entry.getKey(), entry.getValue()));
             return resume;
         }
     }
@@ -126,6 +114,21 @@ public class DataStreamSerialization implements StreamSerializationStrategy {
     @FunctionalInterface
     private interface WriterAction<T> {
         void write(T t) throws IOException;
+    }
+
+    private <T> Collection<T> readCollection(DataInputStream dis, ReaderAction<T> action) throws IOException {
+        int size = dis.readInt();
+        List<T> collection = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            T item = action.read();
+            collection.add(item);
+        }
+        return collection;
+    }
+
+    @FunctionalInterface
+    private interface ReaderAction<T> {
+        T read() throws IOException;
     }
 
 }
