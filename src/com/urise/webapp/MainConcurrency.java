@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
-    private static int counter;
+    private int counter;
     private static final Object LOCK = new Object();
 
     public static void main(String[] args) throws InterruptedException {
@@ -15,15 +15,31 @@ public class MainConcurrency {
             @Override
             public void run() {
                 System.out.println(getName() + ", " + getState());
+                throw new IllegalStateException();
             }
         };
         thread0.start();
 
-        new Thread(() -> System.out.println(Thread.currentThread().getName() + ", " + Thread.currentThread().getState())).start();
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName() + ", " + Thread.currentThread().getState());
+            }
+
+            private void inc() {
+                synchronized (this) {
+//                    counter++;
+                }
+            }
+
+        }).start();
+
         System.out.println(thread0.getState());
 
         final MainConcurrency mainConcurrency = new MainConcurrency();
         List<Thread> threadList = new ArrayList<>(THREADS_NUMBER);
+
         for (int i = 0; i < THREADS_NUMBER; i++) {
             Thread thread = new Thread(() -> {
                 for (int j = 0; j < 100; j++) {
@@ -33,14 +49,15 @@ public class MainConcurrency {
             thread.start();
             threadList.add(thread);
         }
+
         threadList.forEach(t -> {
             try {
                 t.join();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         });
-        System.out.println(counter);
+        System.out.println(mainConcurrency.counter);
     }
 
     private synchronized void inc() {
