@@ -88,7 +88,7 @@ public class Company implements Serializable {
             Objects.requireNonNull(startDate, "startDate must not be null");
             Objects.requireNonNull(endDate, "endDate must not be null");
             this.title = title;
-            this.description = description;
+            this.description = description == null ? "" : description;
             this.startDate = startDate;
             this.endDate = endDate;
         }

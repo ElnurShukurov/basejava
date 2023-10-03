@@ -39,11 +39,7 @@ public class DataStreamSerialization implements StreamSerializationStrategy {
                             dos.writeUTF(company.getHomepage().getUrl());
                             writeCollection(company.getPeriods(), dos, period -> {
                                 dos.writeUTF(period.getTitle());
-                                String description = period.getDescription();
-                                dos.writeBoolean(description != null);
-                                if (description != null) {
-                                    dos.writeUTF(description);
-                                }
+                                dos.writeUTF(period.getDescription());
                                 dos.writeUTF(period.getStartDate().toString());
                                 dos.writeUTF(period.getEndDate().toString());
                             });
@@ -86,8 +82,7 @@ public class DataStreamSerialization implements StreamSerializationStrategy {
                             String companyUrl = dis.readUTF();
                             List<Company.Period> periods = (List<Company.Period>) readCollection(dis, () -> {
                                 String periodTitle = dis.readUTF();
-                                boolean hasValue = dis.readBoolean();
-                                String periodDescription = hasValue ? dis.readUTF() : null;
+                                String periodDescription = dis.readUTF();
                                 LocalDate startDate = LocalDate.parse(dis.readUTF());
                                 LocalDate endDate = LocalDate.parse(dis.readUTF());
                                 return new Company.Period(startDate, endDate, periodTitle, periodDescription);
