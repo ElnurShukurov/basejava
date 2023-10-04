@@ -3,8 +3,6 @@ package com.urise.webapp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MainStreams {
@@ -28,14 +26,15 @@ public class MainStreams {
     }
 
     static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce((acc, num) -> acc * 10 + num).orElseThrow(NoSuchElementException::new);
+        return Arrays.stream(values).distinct().sorted().reduce(0, (acc, num) -> acc * 10 + num);
     }
 
     static List<Integer> oddOrEven(List<Integer> integers) {
-        AtomicInteger sum = new AtomicInteger();
+        boolean evenCount = integers.stream()
+                .filter(n -> n%2 != 0)
+                .count() % 2 == 0;
         return integers.stream()
-                .peek(sum::addAndGet)
-                .collect(Collectors.partitioningBy(n -> n % 2 == 0))
-                .get(sum.get() % 2 != 0);
+                .filter(n -> evenCount == (n%2 != 0))
+                .collect(Collectors.toList());
     }
 }
