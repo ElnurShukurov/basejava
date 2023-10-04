@@ -30,8 +30,11 @@ public class MainStreams {
     }
 
     static List<Integer> oddOrEven(List<Integer> integers) {
-        return new ArrayList<>(integers.stream()
-                .collect(Collectors.partitioningBy(i -> i % 2 == 0))
-                .get(integers.stream().mapToInt(Integer::intValue).sum() % 2 != 0));
+        boolean evenCount = integers.stream()
+                .filter(n -> n%2 != 0)
+                .count() % 2 == 0;
+        return integers.stream()
+                .filter(n -> evenCount == (n%2 != 0))
+                .collect(Collectors.toList());
     }
 }
