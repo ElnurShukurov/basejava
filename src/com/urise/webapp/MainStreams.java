@@ -3,6 +3,7 @@ package com.urise.webapp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -24,11 +25,10 @@ public class MainStreams {
         list2.add(7);
         System.out.println("oddOrEven: " + oddOrEven(list));
         System.out.println("oddOrEven: " + oddOrEven(list2));
-
     }
 
     static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce((acc, num) -> acc * 10 + num).getAsInt();
+        return Arrays.stream(values).distinct().sorted().reduce((acc, num) -> acc * 10 + num).orElseThrow(NoSuchElementException::new);
     }
 
     static List<Integer> oddOrEven(List<Integer> integers) {
