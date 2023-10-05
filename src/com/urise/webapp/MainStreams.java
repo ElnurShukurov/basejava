@@ -31,10 +31,10 @@ public class MainStreams {
 
     static List<Integer> oddOrEven(List<Integer> integers) {
         boolean evenCount = integers.stream()
-                .filter(n -> n%2 != 0)
+                .filter(n -> n % 2 != 0)
                 .count() % 2 == 0;
         return integers.stream()
-                .filter(n -> evenCount == (n%2 != 0))
+                .filter(n -> evenCount == (n % 2 != 0))
                 .collect(Collectors.toList());
     }
 }
