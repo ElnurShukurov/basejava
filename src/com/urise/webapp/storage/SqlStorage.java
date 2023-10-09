@@ -25,7 +25,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        SqlHelper.execute(connectionFactory, "UPDATE resume SET full_name = ? where uuid = ?", ps -> {
+        SqlHelper.execute(connectionFactory, "UPDATE resume SET full_name = ? WHERE uuid = ?", ps -> {
             ps.setString(1, "New Name");
             ps.setString(2, r.getUuid());
             int rowsUpdated = ps.executeUpdate();
@@ -90,7 +90,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return SqlHelper.execute(connectionFactory, "SELECT COUNT(*) from resume", ps -> {
+        return SqlHelper.execute(connectionFactory, "SELECT COUNT(*) FROM resume", ps -> {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
