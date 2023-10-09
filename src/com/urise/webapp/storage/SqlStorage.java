@@ -1,8 +1,6 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.util.SqlHelper;
 
@@ -39,18 +37,12 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        try {
-            sqlHelper.execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
-                ps.setString(1, r.getUuid());
-                ps.setString(2, r.getFullName());
-                ps.execute();
-                return null;
-            });
-        } catch (ExistStorageException e) {
-            throw new ExistStorageException(r.getUuid());
-        } catch (StorageException e) {
-            throw new StorageException(e);
-        }
+        sqlHelper.execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
+            ps.setString(1, r.getUuid());
+            ps.setString(2, r.getFullName());
+            ps.execute();
+            return null;
+        });
     }
 
     @Override
@@ -80,7 +72,7 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resultList = new ArrayList<>();
-        return sqlHelper.execute("SELECT * FROM resume ORDER BY uuid, full_name", ps -> {
+        return sqlHelper.execute("SELECT * FROM resume ORDER BY full_name, uuid", ps -> {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
