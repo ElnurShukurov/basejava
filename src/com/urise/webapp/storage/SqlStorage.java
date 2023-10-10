@@ -2,7 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.util.SqlHelper;
+import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,7 +37,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        sqlHelper.execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
+        sqlHelper.<Void>execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
             ps.execute();
@@ -71,15 +71,13 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> resultList = new ArrayList<>();
         return sqlHelper.execute("SELECT * FROM resume ORDER BY full_name, uuid", ps -> {
             ResultSet rs = ps.executeQuery();
+            List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
-                String uuid = rs.getString("uuid");
-                String fullName = rs.getString("full_name");
-                resultList.add(new Resume(uuid, fullName));
+                resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
             }
-            return resultList;
+            return resumes;
         });
     }
 
