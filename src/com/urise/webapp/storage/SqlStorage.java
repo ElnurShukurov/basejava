@@ -39,21 +39,23 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        sqlHelper.<Void>execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
-            ps.setString(1, r.getUuid());
-            ps.setString(2, r.getFullName());
-            ps.execute();
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+                ps.setString(1, r.getUuid());
+                ps.setString(2, r.getFullName());
+                ps.execute();
+            }
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+                for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
+                    ps.setString(1, e.getKey().name());
+                    ps.setString(2, e.getValue());
+                    ps.setString(3, r.getUuid());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
             return null;
         });
-        for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
-            sqlHelper.<Void>execute("INSERT INTO contact (type, value, resume_uuid) VALUES (?,?,?)", ps -> {
-                ps.setString(1, e.getKey().name());
-                ps.setString(2, e.getValue());
-                ps.setString(3, r.getUuid());
-                ps.execute();
-                return null;
-            });
-        }
     }
 
     @Override
