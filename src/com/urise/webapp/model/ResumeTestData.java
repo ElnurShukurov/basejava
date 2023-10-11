@@ -4,13 +4,13 @@ public class ResumeTestData {
     public Resume generateResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-//        resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
-//        resume.addContact(ContactType.SKYPE, "skype:grigory.kislin");
-//        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
-//        resume.addContact(ContactType.LINKEDIN, "");
-//        resume.addContact(ContactType.GITHUB, "");
-//        resume.addContact(ContactType.STACKOVERFLOW, "");
-//        resume.addContact(ContactType.HOME_PAGE, "");
+        resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        resume.addContact(ContactType.SKYPE, "skype:grigory.kislin");
+        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
+        resume.addContact(ContactType.LINKEDIN, "");
+        resume.addContact(ContactType.GITHUB, "");
+        resume.addContact(ContactType.STACKOVERFLOW, "");
+        resume.addContact(ContactType.HOME_PAGE, "");
 //
 //        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и " +
 //                "корпоративного обучения по Java Web и Enterprise технологиям"));
