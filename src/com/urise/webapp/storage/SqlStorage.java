@@ -68,11 +68,7 @@ public class SqlStorage implements Storage {
                     }
                     Resume r = new Resume(uuid, rs.getString("full_name"));
                     do {
-                        String value = rs.getString("value");
-                        if (value != null) {
-                            ContactType type = ContactType.valueOf(rs.getString("type"));
-                            r.addContact(type, value);
-                        }
+                        addContactsToResume(rs, r);
                     }
                     while (rs.next());
                     return r;
@@ -102,14 +98,12 @@ public class SqlStorage implements Storage {
                     while (rs.next()) {
                         String uuid = rs.getString("uuid");
                         String fullName = rs.getString("full_name");
-                        String contactType = rs.getString("type");
-                        String value = rs.getString("value");
                         if (!resumeMap.containsKey(uuid)) {
                             Resume r = new Resume(uuid, fullName);
-                            r.addContact(ContactType.valueOf(contactType), value);
+                            addContactsToResume(rs, r);
                             resumeMap.put(uuid, r);
                         } else {
-                            resumeMap.get(uuid).addContact(ContactType.valueOf(contactType), value);
+                            addContactsToResume(rs, resumeMap.get(uuid));
                         }
                     }
                     return new ArrayList<>(resumeMap.values());
@@ -139,11 +133,15 @@ public class SqlStorage implements Storage {
     private void deleteContacts(String uuid, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
             ps.setString(1, uuid);
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated == 0) {
-                throw new NotExistStorageException(uuid);
-            }
+            ps.executeUpdate();
         }
     }
 
+    private void addContactsToResume(ResultSet rs, Resume r) throws SQLException {
+        String value = rs.getString("value");
+        if (value != null) {
+            ContactType type = ContactType.valueOf(rs.getString("type"));
+            r.addContact(type, value);
+        }
+    }
 }
