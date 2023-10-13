@@ -90,8 +90,8 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.execute(
-                "SELECT * FROM resume r " +
-                        "LEFT JOIN contact c on r.uuid = c.resume_uuid " +
+                "SELECT * FROM resume r\n" +
+                        "LEFT JOIN contact c ON r.uuid = c.resume_uuid\n" +
                         "ORDER BY r.full_name, r.uuid", ps -> {
                     Map<String, Resume> resumeMap = new LinkedHashMap<>();
                     ResultSet rs = ps.executeQuery();
@@ -100,11 +100,9 @@ public class SqlStorage implements Storage {
                         String fullName = rs.getString("full_name");
                         if (!resumeMap.containsKey(uuid)) {
                             Resume r = new Resume(uuid, fullName);
-                            addContactsToResume(rs, r);
                             resumeMap.put(uuid, r);
-                        } else {
-                            addContactsToResume(rs, resumeMap.get(uuid));
                         }
+                        addContactsToResume(rs, resumeMap.get(uuid));
                     }
                     return new ArrayList<>(resumeMap.values());
                 });
@@ -133,15 +131,14 @@ public class SqlStorage implements Storage {
     private void deleteContacts(String uuid, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
             ps.setString(1, uuid);
-            ps.executeUpdate();
+            ps.execute();
         }
     }
 
     private void addContactsToResume(ResultSet rs, Resume r) throws SQLException {
         String value = rs.getString("value");
         if (value != null) {
-            ContactType type = ContactType.valueOf(rs.getString("type"));
-            r.addContact(type, value);
+            r.addContact(ContactType.valueOf(rs.getString("type")), value);
         }
     }
 }

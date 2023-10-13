@@ -3,6 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.Config;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.model.ResumeTestData;
 import org.junit.Before;
@@ -41,6 +42,10 @@ public abstract class AbstractStorageTest {
         R2 = resumeTestData.generateResume(UUID_2, NAME_2);
         R3 = resumeTestData.generateResume(UUID_3, NAME_3);
         R4 = resumeTestData.generateResume(UUID_4, NAME_4);
+        R1.addContact(ContactType.EMAIL, "elnur@mail.ru");
+        R1.addContact(ContactType.PHONE, "123-45-66");
+        R2.addContact(ContactType.SKYPE, "@skype");
+        R2.addContact(ContactType.PHONE, "654-32-11");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -66,12 +71,16 @@ public abstract class AbstractStorageTest {
     @Test
     public void updateExistingResume() throws Exception {
         Resume resumeToUpdate = new Resume(UUID_1, "New Name");
+        R1.addContact(ContactType.EMAIL, "elnur@list.ru");
+        R2.addContact(ContactType.SKYPE, "@new_skype");
+        R2.addContact(ContactType.PHONE, "789-98-77");
         storage.update(resumeToUpdate);
         assertTrue(resumeToUpdate.equals(storage.get(UUID_1)));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNonExistingResume() throws Exception {
+        R4.addContact(ContactType.PHONE, "+123456");
         storage.update(R4);
     }
 
@@ -118,7 +127,7 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() throws Exception {
         List<Resume> actualStorage = storage.getAllSorted();
         List<Resume> expectedStorage = new ArrayList<>(Arrays.asList(R1, R2, R3));
-        assertArrayEquals(actualStorage.toArray(), expectedStorage.toArray());
+        assertArrayEquals(expectedStorage.toArray(), actualStorage.toArray());
     }
 
     @Test
