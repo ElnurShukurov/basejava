@@ -7,7 +7,6 @@ import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,23 +88,29 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.execute(
-                "SELECT * FROM resume r\n" +
-                        "LEFT JOIN contact c ON r.uuid = c.resume_uuid\n" +
-                        "ORDER BY r.full_name, r.uuid", ps -> {
-                    Map<String, Resume> resumeMap = new LinkedHashMap<>();
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        String uuid = rs.getString("uuid");
-                        String fullName = rs.getString("full_name");
-                        if (!resumeMap.containsKey(uuid)) {
-                            Resume r = new Resume(uuid, fullName);
-                            resumeMap.put(uuid, r);
+        return sqlHelper.transactionalExecute(conn -> {
+            List<Resume> resumes = new ArrayList<>();
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    String fullName = rs.getString("full_name");
+                    resumes.add(new Resume(uuid, fullName));
+                }
+            }
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String resumeUuid = rs.getString("resume_uuid");
+                    for (Resume resume : resumes) {
+                        if (resume.getUuid().equals(resumeUuid)) {
+                            addContactsToResume(rs, resume);
                         }
-                        addContactsToResume(rs, resumeMap.get(uuid));
                     }
-                    return new ArrayList<>(resumeMap.values());
-                });
+                }
+            }
+            return resumes;
+        });
     }
 
     @Override
