@@ -11,24 +11,20 @@ public class ResumeTestData {
         resume.addContact(ContactType.GITHUB, "");
         resume.addContact(ContactType.STACKOVERFLOW, "");
         resume.addContact(ContactType.HOME_PAGE, "");
-//
-//        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и " +
-//                "корпоративного обучения по Java Web и Enterprise технологиям"));
-//
-//        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад " +
-//                "ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
-//
-//        List<String> achievements = new ArrayList<>();
-//        achievements.add("Организация команды и успешная реализация Java проектов для сторонних заказчиков: приложения автопарк на стеке Spring Cloud/микросервисы, система мониторинга показателей спортсменов на Spring Boot, участие в проекте МЭШ на Play-2, многомодульный Spring Boot + Vaadin проект для комплексных DIY смет");
-//        achievements.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA). Организация онлайн стажировок и ведение проектов. Более 3500 выпускников.");
-//        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievements));
-//
-//        List<String> qualifications = new ArrayList<>();
-//        qualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2\n");
-//        qualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce\n");
-//        qualifications.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite, MS SQL, HSQLDB\n");
-//        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualifications));
-//
+
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и " +
+                "корпоративного обучения по Java Web и Enterprise технологиям"));
+
+        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад " +
+                "ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Организация команды и успешная реализация Java проектов для сторонних заказчиков: приложения автопарк на стеке Spring Cloud/микросервисы, система мониторинга показателей спортсменов на Spring Boot, участие в проекте МЭШ на Play-2, многомодульный Spring Boot + Vaadin проект для комплексных DIY смет" +
+                "\n С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA). Организация онлайн стажировок и ведение проектов. Более 3500 выпускников."));
+
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2" +
+                "\n Version control: Subversion, Git, Mercury, ClearCase, Perforce" +
+                "\n DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite, MS SQL, HSQLDB"));
+
 //        List<Company> experiences = new ArrayList<>();
 //        Company javaOnlineProjects = new Company("Java Online Projects", "https://javaops.ru/", new Company.Period(LocalDate.of(2013, 10, 1), LocalDate.now(), "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
 //        experiences.add(javaOnlineProjects);
