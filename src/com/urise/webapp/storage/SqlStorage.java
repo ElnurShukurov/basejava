@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
@@ -159,10 +160,25 @@ public class SqlStorage implements Storage {
             for (Map.Entry<SectionType, Section> e : r.getSections().entrySet()) {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, e.getKey().name());
-                ps.setString(3, e.getValue().toString());
+                ps.setString(3, getSectionContent(e.getValue()));
                 ps.addBatch();
             }
             ps.executeBatch();
+        }
+    }
+
+    private String getSectionContent(Section section) {
+        if (section instanceof TextSection) {
+            return ((TextSection) section).getContent();
+        } else if (section instanceof ListSection) {
+            List<String> items = ((ListSection) section).getItems();
+            StringJoiner joiner = new StringJoiner("\n");
+            for (String item : items) {
+                joiner.add(item);
+            }
+            return "[" + joiner.toString() + "]";
+        } else {
+            throw new IllegalArgumentException("Unknown section type: " + section.getClass().getSimpleName());
         }
     }
 
