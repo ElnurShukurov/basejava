@@ -1,7 +1,37 @@
-package com.urise.webapp.model;
+package com.urise.webapp;
+
+import com.urise.webapp.model.*;
+
+import java.util.UUID;
 
 public class ResumeTestData {
-    public Resume generateResume(String uuid, String fullName) {
+    public static final String UUID_1 = UUID.randomUUID().toString();
+    public static final String UUID_2 = UUID.randomUUID().toString();
+    public static final String UUID_3 = UUID.randomUUID().toString();
+    public static final String UUID_4 = UUID.randomUUID().toString();
+
+    public static final String NAME_1 = "Name1";
+    public static final String NAME_2 = "Name2";
+    public static final String NAME_3 = "Name3";
+    public static final String NAME_4 = "Name4";
+
+    public static final Resume R1;
+    public static final Resume R2;
+    public static final Resume R3;
+    public static final Resume R4;
+
+    static {
+        R1 = generateResume(UUID_1, NAME_1);
+        R2 = generateResume(UUID_2, NAME_2);
+        R3 = generateResume(UUID_3, NAME_3);
+        R4 = generateResume(UUID_4, NAME_4);
+        R1.addContact(ContactType.EMAIL, "elnur@mail.ru");
+        R1.addContact(ContactType.PHONE, "123-45-66");
+        R2.addContact(ContactType.SKYPE, "@skype");
+        R2.addContact(ContactType.PHONE, "654-32-11");
+    }
+
+    public static Resume generateResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
         resume.addContact(ContactType.PHONE, "+7(921) 855-0482");

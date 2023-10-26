@@ -3,7 +3,8 @@ package com.urise.webapp.storage;
 import com.urise.webapp.Config;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.model.*;
+import com.urise.webapp.model.ContactType;
+import com.urise.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,40 +12,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
+import static com.urise.webapp.ResumeTestData.*;
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
     protected final Storage storage;
-    static ResumeTestData resumeTestData = new ResumeTestData();
-
-    private static final String UUID_1 = UUID.randomUUID().toString();
-    private static final String UUID_2 = UUID.randomUUID().toString();
-    private static final String UUID_3 = UUID.randomUUID().toString();
-    private static final String UUID_4 = UUID.randomUUID().toString();
-
-    private static final String NAME_1 = "Name1";
-    private static final String NAME_2 = "Name2";
-    private static final String NAME_3 = "Name3";
-    private static final String NAME_4 = "Name4";
-
-    private static final Resume R1;
-    private static final Resume R2;
-    private static final Resume R3;
-    private static final Resume R4;
-
-    static {
-        R1 = resumeTestData.generateResume(UUID_1, NAME_1);
-        R2 = resumeTestData.generateResume(UUID_2, NAME_2);
-        R3 = resumeTestData.generateResume(UUID_3, NAME_3);
-        R4 = resumeTestData.generateResume(UUID_4, NAME_4);
-        R1.addContact(ContactType.EMAIL, "elnur@mail.ru");
-        R1.addContact(ContactType.PHONE, "123-45-66");
-        R2.addContact(ContactType.SKYPE, "@skype");
-        R2.addContact(ContactType.PHONE, "654-32-11");
-    }
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
