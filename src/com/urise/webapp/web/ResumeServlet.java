@@ -30,8 +30,6 @@ public class ResumeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 //        response.setHeader("Content-Type", "text/html; charset=UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        String name = request.getParameter("name");
-        response.getWriter().write(name == null ? "Hello Resumes!" : "Hello " + name + "!");
         Writer writer = response.getWriter();
         writer.write(
                 "<html>\n" +
@@ -40,7 +38,6 @@ public class ResumeServlet extends HttpServlet {
                         "    <title>Resumes</title>\n" +
                         "</head>\n" +
                         "<body>\n" +
-                        "<br>\n" + "<br>\n" +
                         "<section>\n" +
                         "<table border=\"1\" cellpadding=\"10\">\n" +
                         "    <tr>\n" +
