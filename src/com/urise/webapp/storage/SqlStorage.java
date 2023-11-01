@@ -29,7 +29,7 @@ public class SqlStorage implements Storage {
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
-                ps.setString(1, "New Name");
+                ps.setString(1, r.getFullName());
                 ps.setString(2, r.getUuid());
                 int rowsUpdated = ps.executeUpdate();
                 if (rowsUpdated == 0) {
