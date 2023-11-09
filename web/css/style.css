@@ -44,28 +44,3 @@ h2, h3 {
 li {
     margin: 15px 0;
 }
-
-a[href^="skype:"] {
-    padding-left: 20px !important;
-    background: url(../img/skype.png) no-repeat center left;
-}
-
-a[href^="mailto:"] {
-    padding-left: 20px !important;
-    background: url(../img/mail.png) no-repeat center left;
-}
-
-a[href^="https://stackoverflow.com"] {
-    padding-left: 20px !important;
-    background: url(../img/so.png) no-repeat center left;
-}
-
-a[href^="https://www.linkedin.com"] {
-    padding-left: 20px !important;
-    background: url(../img/lin.png) no-repeat center left;
-}
-
-a[href*="github."] {
-    padding-left: 20px !important;
-    background: url(../img/gh.png) no-repeat center left;
-}
