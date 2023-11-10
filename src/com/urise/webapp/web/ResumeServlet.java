@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -92,6 +93,7 @@ public class ResumeServlet extends HttpServlet {
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
+            return;
         }
         Resume r;
         switch (action) {
@@ -102,6 +104,27 @@ public class ResumeServlet extends HttpServlet {
             case "view":
             case "edit":
                 r = storage.get(uuid);
+                break;
+            case "add":
+                String resumeUuid = UUID.randomUUID().toString();
+                r = new Resume(resumeUuid, "");
+                for (SectionType type : SectionType.values()) {
+                    switch (type) {
+                        case OBJECTIVE:
+                        case PERSONAL:
+                            r.addSection(type, new TextSection(""));
+                            break;
+                        case ACHIEVEMENT:
+                        case QUALIFICATIONS:
+                            r.addSection(type, new ListSection(""));
+                            break;
+                        case EXPERIENCE:
+                        case EDUCATION:
+                            r.addSection(type, new CompanySection(new Company("", "", new Company.Period(LocalDate.now(), LocalDate.now(), "", ""))));
+                            break;
+                    }
+                }
+                storage.save(r);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
