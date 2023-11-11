@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -29,8 +28,14 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume r = storage.get(uuid);
-        r.setFullName(fullName);
+        final boolean isExist = (uuid == null || uuid.length() == 0);
+        Resume r;
+        if (isExist) {
+            r = new Resume(fullName);
+        } else {
+            r = storage.get(uuid);
+            r.setFullName(fullName);
+        }
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
@@ -82,14 +87,18 @@ public class ResumeServlet extends HttpServlet {
                 }
             }
         }
-        storage.update(r);
-        System.out.println("Resume after update: " + storage.get(uuid).getSections());
+        if (isExist) {
+            storage.save(r);
+        } else {
+            storage.update(r);
+        }
         response.sendRedirect("resume");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
+
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
@@ -102,12 +111,50 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "view":
-            case "edit":
                 r = storage.get(uuid);
                 break;
+            case "edit":
+                r = storage.get(uuid);
+                for (SectionType type : SectionType.values()) {
+                    Section section = r.getSection(type);
+                    switch (type) {
+                        case OBJECTIVE:
+                        case PERSONAL:
+                            if (section == null) {
+                                section = new TextSection("");
+                            }
+                            break;
+                        case ACHIEVEMENT:
+                        case QUALIFICATIONS:
+                            if (section == null) {
+                                section = new ListSection("");
+                            }
+                            break;
+                        case EXPERIENCE:
+                        case EDUCATION:
+                            CompanySection companySection = null;
+                            if (section != null) {
+                                companySection = (CompanySection) section;
+                            }
+                            List<Company> emptyCompanies = new ArrayList<>();
+                            emptyCompanies.add(new Company());
+                            if (companySection != null) {
+                                for (Company company : companySection.getCompanies()) {
+                                    List<Company.Period> emptyPeriods = new ArrayList<>();
+                                    emptyPeriods.add(new Company.Period());
+                                    emptyPeriods.addAll(company.getPeriods());
+                                    emptyCompanies.add(new Company(company.getHomepage(), emptyPeriods));
+                                }
+                            }
+                            section = new CompanySection(emptyCompanies);
+                            break;
+
+                    }
+                    r.addSection(type, section);
+                }
+                break;
             case "add":
-                String resumeUuid = UUID.randomUUID().toString();
-                r = new Resume(resumeUuid, "");
+                r = new Resume();
                 for (SectionType type : SectionType.values()) {
                     switch (type) {
                         case OBJECTIVE:
@@ -124,7 +171,6 @@ public class ResumeServlet extends HttpServlet {
                             break;
                     }
                 }
-                storage.save(r);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");

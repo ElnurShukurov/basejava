@@ -61,6 +61,7 @@
                             <dd><input type="text" name="${type}url" size=100 value="${company.homepage.url}"></dd>
                             </dd>
                         </dl>
+
                         <c:forEach var="period" items="${company.periods}">
                             <jsp:useBean id="period" type="com.urise.webapp.model.Company.Period"/>
                             <dl>
@@ -87,7 +88,7 @@
         </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
