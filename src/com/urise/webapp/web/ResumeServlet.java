@@ -87,12 +87,16 @@ public class ResumeServlet extends HttpServlet {
                 }
             }
         }
-        if (isExist) {
-            storage.save(r);
+        if (fullName == null || fullName.trim().length() == 0) {
+            response.sendRedirect("/resumes");
         } else {
-            storage.update(r);
+            if (isExist) {
+                storage.save(r);
+            } else {
+                storage.update(r);
+            }
+            response.sendRedirect("resume");
         }
-        response.sendRedirect("resume");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -167,7 +171,7 @@ public class ResumeServlet extends HttpServlet {
                             break;
                         case EXPERIENCE:
                         case EDUCATION:
-                            r.addSection(type, new CompanySection(new Company("", "", new Company.Period(LocalDate.now(), LocalDate.now(), "", ""))));
+                            r.addSection(type, new CompanySection(new Company("", "", new Company.Period())));
                             break;
                     }
                 }
@@ -185,4 +189,3 @@ public class ResumeServlet extends HttpServlet {
         return str == null || str.trim().length() == 0;
     }
 }
-

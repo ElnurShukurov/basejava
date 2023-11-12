@@ -41,7 +41,7 @@
         </c:when>
 
         <c:when test="${type == 'ACHIEVEMENT' || type == 'QUALIFICATIONS'}">
-        <c:if test="${fn:length(section.items) gt 0 && fn:length(section.items[0]) > 0}}">
+        <c:if test="${fn:length(section.items) gt 0 && fn:length(section.items[0]) > 0}">
         <h3>${type.title}</h3>
         <tr>
             <td>
