@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -57,12 +59,9 @@ public class ResumeServlet extends HttpServlet {
                     case QUALIFICATIONS:
                         String[] items = value.split("\\n");
                         if (items.length > 0) {
-                            List<String> nonBlankValues = new ArrayList<>();
-                            for (String val : items) {
-                                if (!isEmpty(val)) {
-                                    nonBlankValues.add(val);
-                                }
-                            }
+                            List<String> nonBlankValues = Arrays.stream(items)
+                                    .filter(val -> !isEmpty(val))
+                                    .collect(Collectors.toList());
                             if (!nonBlankValues.isEmpty()) {
                                 r.addSection(type, new ListSection(nonBlankValues));
                             } else {
