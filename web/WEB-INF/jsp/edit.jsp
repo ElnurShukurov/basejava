@@ -20,7 +20,7 @@
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <dl>
             <dt>Имя:</dt>
-            <dd><input type="text" name="fullName" size="50" value="${resume.fullName}"></dd>
+            <dd><input type="text" name="fullName" size="50" value="${resume.fullName}" required></dd>
         </dl>
         <h2>Контакты:</h2>
         <c:forEach var="type" items="<%=ContactType.values()%>">
@@ -46,7 +46,7 @@
                     <h3>${type.title}</h3>
                     <c:set var="section" value="${resume.getSection(type)}"/>
                     <textarea name='${type}' cols=75
-                              rows=5><%=String.join("\n", ((ListSection) section).getItems())%></textarea>>
+                              rows=5><%=String.join("\n", ((ListSection) section).getItems())%></textarea>
                 </c:when>
                 <c:when test="${type == 'EDUCATION' || type == 'EXPERIENCE'}">
                     <h3>${type.title}</h3>

@@ -55,7 +55,22 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        r.addSection(type, new ListSection(value.split("\\n")));
+                        String[] items = value.split("\\n");
+                        if (items.length > 0) {
+                            List<String> nonBlankValues = new ArrayList<>();
+                            for (String val : items) {
+                                if (!isEmpty(val)) {
+                                    nonBlankValues.add(val);
+                                }
+                            }
+                            if (!nonBlankValues.isEmpty()) {
+                                r.addSection(type, new ListSection(nonBlankValues));
+                            } else {
+                                r.getSections().remove(type);
+                            }
+                        } else {
+                            r.getSections().remove(type);
+                        }
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
