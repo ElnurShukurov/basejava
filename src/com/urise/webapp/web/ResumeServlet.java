@@ -150,16 +150,15 @@ public class ResumeServlet extends HttpServlet {
                             break;
                         case EXPERIENCE:
                         case EDUCATION:
-                            CompanySection companySection = null;
+                            CompanySection companySection = (CompanySection) section;
                             if (section != null) {
                                 companySection = (CompanySection) section;
                             }
                             List<Company> emptyCompanies = new ArrayList<>();
-                            emptyCompanies.add(new Company());
+                            emptyCompanies.add(new Company("", "", new Company.Period()));
                             if (companySection != null) {
                                 for (Company company : companySection.getCompanies()) {
                                     List<Company.Period> emptyPeriods = new ArrayList<>();
-                                    emptyPeriods.add(new Company.Period());
                                     emptyPeriods.addAll(company.getPeriods());
                                     emptyCompanies.add(new Company(company.getHomepage(), emptyPeriods));
                                 }
