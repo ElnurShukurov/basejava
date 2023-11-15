@@ -1,7 +1,7 @@
 <%@ page import="com.urise.webapp.model.CompanySection" %>
 <%@ page import="com.urise.webapp.model.ListSection" %>
-<%@ page import="com.urise.webapp.model.SectionType" %>
 <%@ page import="com.urise.webapp.model.TextSection" %>
+<%@ page import="com.urise.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -75,14 +75,14 @@
             <jsp:useBean id="period" type="com.urise.webapp.model.Company.Period"/>
         <tr>
             <td>
-                Период: ${period.startDate} - ${period.endDate}<br>
+                Период: <%=DateUtil.format(period.getStartDate())%> - <%=DateUtil.format(period.getEndDate())%><br>
             </td>
             <td>
                 Должность: ${period.title} <br>
             </td>
             <c:if test="${not empty period.description}">
                 <td>
-                    Описание: ${period.description}
+                    Описание: ${period.description}<br>
                 </td>
             </c:if>
         </tr>

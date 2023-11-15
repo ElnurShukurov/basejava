@@ -3,6 +3,7 @@ package com.urise.webapp;
 import com.urise.webapp.model.*;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -56,15 +57,15 @@ public class ResumeTestData {
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2", "Version control: Subversion, Git, Mercury, ClearCase, Perforce", "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite, MS SQL, HSQLDB"));
 
         List<Company> experiences = new ArrayList<>();
-        Company javaOnlineProjects = new Company("Java Online Projects", "https://javaops.ru/", new Company.Period(LocalDate.of(2013, 10, 1), LocalDate.now(), "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
-        Company wrike = new Company("Wrike", "https://www.wrike.com/", new Company.Period(LocalDate.of(2014, 10, 1), LocalDate.of(2016, 1, 1), "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
+        Company javaOnlineProjects = new Company("Java Online Projects", "https://javaops.ru/", new Company.Period(2013, Month.OCTOBER, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
+        Company wrike = new Company("Wrike", "https://www.wrike.com/", new Company.Period(2014, Month.OCTOBER, 2016, Month.JANUARY, "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
         experiences.add(javaOnlineProjects);
         experiences.add(wrike);
         resume.addSection(SectionType.EXPERIENCE, new CompanySection(experiences));
 
         List<Company> educations = new ArrayList<>();
-        Company coursera = new Company("Coursera", "https://www.coursera.org/course/progfun", new Company.Period(LocalDate.of(2013, 3, 1), LocalDate.of(2013, 5, 1), "'Functional Programming Principles in Scala' by Martin Odersky", null));
-        Company university = new Company("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/", new Company.Period(LocalDate.of(1987, 9, 1), LocalDate.of(1993, 7, 1), "Инженер (программист Fortran, C)", null), new Company.Period(LocalDate.of(1993, 9, 1), LocalDate.of(1996, 7, 1), "Аспирантура (программист С, С++)", null));
+        Company coursera = new Company("Coursera", "https://www.coursera.org/course/progfun", new Company.Period(2013, Month.MARCH, 2013, Month.MAY, "'Functional Programming Principles in Scala' by Martin Odersky", null));
+        Company university = new Company("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/", new Company.Period(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", null), new Company.Period(LocalDate.of(1993, 9, 1), LocalDate.of(1996, 7, 1), "Аспирантура (программист С, С++)", null));
         educations.add(coursera);
         educations.add(university);
         resume.addSection(SectionType.EDUCATION, new CompanySection(educations));

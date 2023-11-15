@@ -3,6 +3,7 @@ package com.urise.webapp.web;
 import com.urise.webapp.Config;
 import com.urise.webapp.model.*;
 import com.urise.webapp.storage.Storage;
+import com.urise.webapp.util.DateUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -10,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,12 +84,12 @@ public class ResumeServlet extends HttpServlet {
                                 String[] descriptions = request.getParameterValues(type.name() + i + "description");
                                 for (int j = 0; j < titles.length; j++) {
                                     if (!isEmpty(titles[j])) {
-                                        periodList.add(new Company.Period(
-                                                LocalDate.parse(startDates[j], DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                                                LocalDate.parse(endDates[j], DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                                        periodList.add(new Company.Period(DateUtil.parse(startDates[j]),
+                                                DateUtil.parse(endDates[j]),
                                                 titles[j],
                                                 descriptions[j])
                                         );
+
                                     }
                                 }
                                 companies.add(new Company(new Link(companyName, urls[i]), periodList));
@@ -158,9 +157,8 @@ public class ResumeServlet extends HttpServlet {
                                     List<Company.Period> emptyPeriods = new ArrayList<>();
                                     if (company.getPeriods() != null && !company.getPeriods().isEmpty()) {
                                         emptyPeriods.addAll(company.getPeriods());
-                                    } else {
-                                        emptyPeriods.add(new Company.Period());
                                     }
+                                    emptyPeriods.add(new Company.Period());
                                     emptyCompanies.add(new Company(company.getHomepage(), emptyPeriods));
                                 }
                             }

@@ -2,6 +2,7 @@
 <%@ page import="com.urise.webapp.model.ContactType" %>
 <%@ page import="com.urise.webapp.model.ListSection" %>
 <%@ page import="com.urise.webapp.model.SectionType" %>
+<%@ page import="com.urise.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -67,9 +68,9 @@
                             <dl>
                                 <dt>Период:</dt>
                                 <dd><input type="text" name="${type}${counter.index}startDate" size="10"
-                                           value="${period.startDate}"> -
+                                           value="<%=DateUtil.format(period.getStartDate())%>" placeholder=MM/yyyy> -
                                     <input type="text" name="${type}${counter.index}endDate" size="10"
-                                           value="${period.endDate}"></dd>
+                                           value="<%=DateUtil.format(period.getEndDate()) %>" placeholder=MM/yyyy></dd>
                             </dl>
                             <dl>
                                 <dt>Должность:</dt>
