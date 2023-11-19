@@ -29,46 +29,46 @@ public class ResumeTestData {
         R2 = generateResume(UUID_2, NAME_2);
         R3 = generateResume(UUID_3, NAME_3);
         R4 = generateResume(UUID_4, NAME_4);
-        R1.addContact(ContactType.EMAIL, "elnur@mail.ru");
-        R1.addContact(ContactType.PHONE, "123-45-66");
-        R2.addContact(ContactType.SKYPE, "@skype");
-        R2.addContact(ContactType.PHONE, "654-32-11");
+        R1.setContact(ContactType.EMAIL, "elnur@mail.ru");
+        R1.setContact(ContactType.PHONE, "123-45-66");
+        R2.setContact(ContactType.SKYPE, "@skype");
+        R2.setContact(ContactType.PHONE, "654-32-11");
     }
 
     public static Resume generateResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
-        resume.addContact(ContactType.SKYPE, "skype:grigory.kislin");
-        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
-        resume.addContact(ContactType.LINKEDIN, "");
-        resume.addContact(ContactType.GITHUB, "");
-        resume.addContact(ContactType.STACKOVERFLOW, "");
-        resume.addContact(ContactType.HOME_PAGE, "");
+        resume.setContact(ContactType.PHONE, "+7(921) 855-0482");
+        resume.setContact(ContactType.SKYPE, "skype:grigory.kislin");
+        resume.setContact(ContactType.EMAIL, "gkislin@yandex.ru");
+        resume.setContact(ContactType.LINKEDIN, "");
+        resume.setContact(ContactType.GITHUB, "");
+        resume.setContact(ContactType.STACKOVERFLOW, "");
+        resume.setContact(ContactType.HOME_PAGE, "");
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и " +
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и " +
                 "корпоративного обучения по Java Web и Enterprise технологиям."));
 
-        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад " +
+        resume.setSection(SectionType.PERSONAL, new TextSection("Аналитический склад " +
                 "ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Организация команды и успешная реализация Java проектов для сторонних заказчиков: приложения автопарк на стеке Spring Cloud/микросервисы, система мониторинга показателей спортсменов на Spring Boot, участие в проекте МЭШ на Play-2, многомодульный Spring Boot + Vaadin проект для комплексных DIY смет", "С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA). Организация онлайн стажировок и ведение проектов. Более 3500 выпускников."));
+        resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Организация команды и успешная реализация Java проектов для сторонних заказчиков: приложения автопарк на стеке Spring Cloud/микросервисы, система мониторинга показателей спортсменов на Spring Boot, участие в проекте МЭШ на Play-2, многомодульный Spring Boot + Vaadin проект для комплексных DIY смет", "С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA). Организация онлайн стажировок и ведение проектов. Более 3500 выпускников."));
 
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2", "Version control: Subversion, Git, Mercury, ClearCase, Perforce", "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite, MS SQL, HSQLDB"));
+        resume.setSection(SectionType.QUALIFICATIONS, new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2", "Version control: Subversion, Git, Mercury, ClearCase, Perforce", "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite, MS SQL, HSQLDB"));
 
         List<Company> experiences = new ArrayList<>();
         Company javaOnlineProjects = new Company("Java Online Projects", "https://javaops.ru/", new Company.Period(2013, Month.OCTOBER, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
         Company wrike = new Company("Wrike", "https://www.wrike.com/", new Company.Period(2014, Month.OCTOBER, 2016, Month.JANUARY, "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
         experiences.add(javaOnlineProjects);
         experiences.add(wrike);
-        resume.addSection(SectionType.EXPERIENCE, new CompanySection(experiences));
+        resume.setSection(SectionType.EXPERIENCE, new CompanySection(experiences));
 
         List<Company> educations = new ArrayList<>();
         Company coursera = new Company("Coursera", "https://www.coursera.org/course/progfun", new Company.Period(2013, Month.MARCH, 2013, Month.MAY, "'Functional Programming Principles in Scala' by Martin Odersky", null));
         Company university = new Company("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/", new Company.Period(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", null), new Company.Period(LocalDate.of(1993, 9, 1), LocalDate.of(1996, 7, 1), "Аспирантура (программист С, С++)", null));
         educations.add(coursera);
         educations.add(university);
-        resume.addSection(SectionType.EDUCATION, new CompanySection(educations));
+        resume.setSection(SectionType.EDUCATION, new CompanySection(educations));
 
         return resume;
     }

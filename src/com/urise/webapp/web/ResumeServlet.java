@@ -39,20 +39,22 @@ public class ResumeServlet extends HttpServlet {
         }
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && value.trim().length() != 0) {
-                r.addContact(type, value);
-            } else {
+            if (isEmpty(value)) {
                 r.getContacts().remove(type);
+            } else {
+                r.setContact(type, value);
             }
         }
         for (SectionType type : SectionType.values()) {
             String[] values = request.getParameterValues(type.name());
             String value = request.getParameter(type.name());
-            if (values != null) {
+            if (isEmpty(value) && values.length < 2) {
+                r.getSections().remove(type);
+            } else {
                 switch (type) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        r.addSection(type, new TextSection(value));
+                        r.setSection(type, new TextSection(value));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
@@ -62,7 +64,7 @@ public class ResumeServlet extends HttpServlet {
                                     .filter(val -> !isEmpty(val))
                                     .collect(Collectors.toList());
                             if (!nonBlankValues.isEmpty()) {
-                                r.addSection(type, new ListSection(nonBlankValues));
+                                r.setSection(type, new ListSection(nonBlankValues));
                             } else {
                                 r.getSections().remove(type);
                             }
@@ -78,10 +80,11 @@ public class ResumeServlet extends HttpServlet {
                             String companyName = values[i];
                             if (!isEmpty(companyName)) {
                                 List<Company.Period> periodList = new ArrayList<>();
-                                String[] startDates = request.getParameterValues(type.name() + i + "startDate");
-                                String[] endDates = request.getParameterValues(type.name() + i + "endDate");
-                                String[] titles = request.getParameterValues(type.name() + i + "title");
-                                String[] descriptions = request.getParameterValues(type.name() + i + "description");
+                                String prefix = type.name() + i;
+                                String[] startDates = request.getParameterValues(prefix + "startDate");
+                                String[] endDates = request.getParameterValues(prefix + "endDate");
+                                String[] titles = request.getParameterValues(prefix + "title");
+                                String[] descriptions = request.getParameterValues(prefix + "description");
                                 for (int j = 0; j < titles.length; j++) {
                                     if (!isEmpty(titles[j])) {
                                         periodList.add(new Company.Period(DateUtil.parse(startDates[j]),
@@ -95,12 +98,12 @@ public class ResumeServlet extends HttpServlet {
                                 companies.add(new Company(new Link(companyName, urls[i]), periodList));
                             }
                         }
-                        r.addSection(type, new CompanySection(companies));
+                        r.setSection(type, new CompanySection(companies));
                         break;
                 }
             }
         }
-        if (fullName == null || fullName.trim().length() == 0) {
+        if (isEmpty(fullName)) {
             response.sendRedirect("/resumes");
         } else {
             if (isExist) {
@@ -115,7 +118,6 @@ public class ResumeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
-
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
@@ -150,22 +152,22 @@ public class ResumeServlet extends HttpServlet {
                         case EXPERIENCE:
                         case EDUCATION:
                             CompanySection companySection = (CompanySection) section;
-                            List<Company> emptyCompanies = new ArrayList<>();
-                            emptyCompanies.add(new Company("", "", new Company.Period()));
+                            List<Company> emptyFirstCompanies = new ArrayList<>();
+                            emptyFirstCompanies.add(Company.EMPTY);
                             if (companySection != null) {
                                 for (Company company : companySection.getCompanies()) {
-                                    List<Company.Period> emptyPeriods = new ArrayList<>();
+                                    List<Company.Period> emptyFirstPeriods = new ArrayList<>();
                                     if (company.getPeriods() != null && !company.getPeriods().isEmpty()) {
-                                        emptyPeriods.addAll(company.getPeriods());
+                                        emptyFirstPeriods.addAll(company.getPeriods());
                                     }
-                                    emptyPeriods.add(new Company.Period());
-                                    emptyCompanies.add(new Company(company.getHomepage(), emptyPeriods));
+                                    emptyFirstPeriods.add(Company.Period.EMPTY);
+                                    emptyFirstCompanies.add(new Company(company.getHomepage(), emptyFirstPeriods));
                                 }
                             }
-                            section = new CompanySection(emptyCompanies);
+                            section = new CompanySection(emptyFirstCompanies);
                             break;
                     }
-                    r.addSection(type, section);
+                    r.setSection(type, section);
                 }
                 break;
             case "add":
@@ -174,15 +176,15 @@ public class ResumeServlet extends HttpServlet {
                     switch (type) {
                         case OBJECTIVE:
                         case PERSONAL:
-                            r.addSection(type, new TextSection(""));
+                            r.setSection(type, new TextSection(""));
                             break;
                         case ACHIEVEMENT:
                         case QUALIFICATIONS:
-                            r.addSection(type, new ListSection(""));
+                            r.setSection(type, new ListSection(""));
                             break;
                         case EXPERIENCE:
                         case EDUCATION:
-                            r.addSection(type, new CompanySection(new Company("", "", new Company.Period())));
+                            r.setSection(type, new CompanySection(new Company("", "", new Company.Period())));
                             break;
                     }
                 }

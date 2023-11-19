@@ -19,6 +19,7 @@ import static com.urise.webapp.util.DateUtil.of;
 
 public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
+    public static final Company EMPTY = new Company("", "", Period.EMPTY);
     @XmlElement
     private Link homepage;
     @XmlElement
@@ -65,6 +66,7 @@ public class Company implements Serializable {
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
+        public static final Period EMPTY = new Period();
         private String title;
         private String description;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)

@@ -34,7 +34,6 @@ public class Resume implements Serializable {
         this(UUID.randomUUID().toString(), fullName);
     }
 
-
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid must not be null");
         Objects.requireNonNull(fullName, "fullName must not be null");
@@ -66,7 +65,7 @@ public class Resume implements Serializable {
         return sections;
     }
 
-    public void addContact(ContactType type, String contact) {
+    public void setContact(ContactType type, String contact) {
         contacts.put(type, contact);
     }
 
@@ -74,12 +73,8 @@ public class Resume implements Serializable {
         return sections.get(type);
     }
 
-    public void addSection(SectionType type, Section section) {
+    public void setSection(SectionType type, Section section) {
         sections.put(type, section);
-    }
-
-    public void removeSection(SectionType type) {
-        sections.remove(type);
     }
 
     @Override
@@ -102,5 +97,4 @@ public class Resume implements Serializable {
     public int hashCode() {
         return Objects.hash(uuid, fullName, contacts, sections);
     }
-
 }

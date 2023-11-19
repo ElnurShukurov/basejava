@@ -43,16 +43,16 @@ public abstract class AbstractStorageTest {
     @Test
     public void updateExistingResume() throws Exception {
         Resume resumeToUpdate = new Resume(UUID_1, "New Name");
-        resumeToUpdate.addContact(ContactType.EMAIL, "elnur@list.ru");
-        resumeToUpdate.addContact(ContactType.SKYPE, "@new_skype");
-        resumeToUpdate.addContact(ContactType.PHONE, "789-98-77");
+        resumeToUpdate.setContact(ContactType.EMAIL, "elnur@list.ru");
+        resumeToUpdate.setContact(ContactType.SKYPE, "@new_skype");
+        resumeToUpdate.setContact(ContactType.PHONE, "789-98-77");
         storage.update(resumeToUpdate);
         assertTrue(resumeToUpdate.equals(storage.get(UUID_1)));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNonExistingResume() throws Exception {
-        R4.addContact(ContactType.PHONE, "+123456");
+        R4.setContact(ContactType.PHONE, "+123456");
         storage.update(R4);
     }
 

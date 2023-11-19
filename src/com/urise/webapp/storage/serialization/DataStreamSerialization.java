@@ -62,7 +62,7 @@ public class DataStreamSerialization implements StreamSerializationStrategy {
                 String contactValue = dis.readUTF();
                 return new AbstractMap.SimpleEntry<>(contactType, contactValue);
             });
-            contacts.forEach(entry -> resume.addContact(entry.getKey(), entry.getValue()));
+            contacts.forEach(entry -> resume.setContact(entry.getKey(), entry.getValue()));
 
             Collection<Map.Entry<SectionType, Section>> sections = readCollection(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
@@ -94,7 +94,7 @@ public class DataStreamSerialization implements StreamSerializationStrategy {
                         throw new IllegalStateException("Unsupported section type: " + sectionType);
                 }
             });
-            sections.forEach(entry -> resume.addSection(entry.getKey(), entry.getValue()));
+            sections.forEach(entry -> resume.setSection(entry.getKey(), entry.getValue()));
             return resume;
         }
     }
