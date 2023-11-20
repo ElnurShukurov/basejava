@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class ListSection extends Section {
     private static final long serialVersionUID = 1L;
+
+    public static final ListSection EMPTY = new ListSection("");
     @XmlElement
     private List<String> items;
 
@@ -43,5 +45,4 @@ public class ListSection extends Section {
     public int hashCode() {
         return Objects.hash(items);
     }
-
 }

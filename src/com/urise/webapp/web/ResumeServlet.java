@@ -4,7 +4,6 @@ import com.urise.webapp.Config;
 import com.urise.webapp.model.*;
 import com.urise.webapp.storage.Storage;
 import com.urise.webapp.util.DateUtil;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,14 +28,16 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        final boolean isExist = (uuid == null || uuid.length() == 0);
+        final boolean isCreate = (uuid == null || uuid.length() == 0);
+
         Resume r;
-        if (isExist) {
+        if (isCreate) {
             r = new Resume(fullName);
         } else {
             r = storage.get(uuid);
             r.setFullName(fullName);
         }
+
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (isEmpty(value)) {
@@ -106,7 +107,7 @@ public class ResumeServlet extends HttpServlet {
         if (isEmpty(fullName)) {
             response.sendRedirect("/resumes");
         } else {
-            if (isExist) {
+            if (isCreate) {
                 storage.save(r);
             } else {
                 storage.update(r);
@@ -140,13 +141,13 @@ public class ResumeServlet extends HttpServlet {
                         case OBJECTIVE:
                         case PERSONAL:
                             if (section == null) {
-                                section = new TextSection("");
+                                section = TextSection.EMPTY;
                             }
                             break;
                         case ACHIEVEMENT:
                         case QUALIFICATIONS:
                             if (section == null) {
-                                section = new ListSection("");
+                                section = ListSection.EMPTY;
                             }
                             break;
                         case EXPERIENCE:
@@ -171,23 +172,7 @@ public class ResumeServlet extends HttpServlet {
                 }
                 break;
             case "add":
-                r = new Resume();
-                for (SectionType type : SectionType.values()) {
-                    switch (type) {
-                        case OBJECTIVE:
-                        case PERSONAL:
-                            r.setSection(type, new TextSection(""));
-                            break;
-                        case ACHIEVEMENT:
-                        case QUALIFICATIONS:
-                            r.setSection(type, new ListSection(""));
-                            break;
-                        case EXPERIENCE:
-                        case EDUCATION:
-                            r.setSection(type, new CompanySection(new Company("", "", new Company.Period())));
-                            break;
-                    }
-                }
+                r = Resume.EMPTY;
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");

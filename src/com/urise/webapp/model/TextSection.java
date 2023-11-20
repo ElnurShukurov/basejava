@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class TextSection extends Section {
     private static long serialVersionUID = 1L;
+
+    public static final TextSection EMPTY = new TextSection("");
     @XmlElement
     private String content;
 
